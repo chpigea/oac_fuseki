@@ -23,6 +23,15 @@ sudo mv apache-jena-fuseki-5.5.0 fuseki
 sudo chown -R $USER:$USER fuseki
 ```
 
+### Enable lucene
+We need to download some libraries. 
+The following script downlaod the required JAR's file and copy into the lib folder of Fuseki:
+
+```console
+chmod +x get-lucene.sh
+./get-lucene.sh
+```
+
 ### Create and configure an empty persitent store
 ```console
 mkdir -p /opt/fuseki/configuration
