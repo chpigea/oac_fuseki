@@ -49,9 +49,9 @@ PREFIX rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX ja:      <http://jena.hpl.hp.com/2005/11/Assembler#>
 PREFIX tdb2:    <http://jena.apache.org/2016/tdb#>
+PREFIX text:    <http://jena.apache.org/text#>
 
 [] rdf:type fuseki:Server ;
-   fuseki:port 3033 ;
    fuseki:services (
      :service
    ) .
@@ -63,13 +63,31 @@ PREFIX tdb2:    <http://jena.apache.org/2016/tdb#>
     fuseki:serviceUpload "upload" ;
     fuseki:serviceReadGraphStore "get" ;
     fuseki:serviceReadWriteGraphStore "data" ;
-    fuseki:dataset :dataset_tdb2 ;
+    fuseki:dataset :dataset_text ;
     .
+
+:dataset_text rdf:type text:TextDataset ;
+    text:dataset   :dataset_tdb2 ;
+    text:index     :indexLucene .
 
 :dataset_tdb2 rdf:type  tdb2:DatasetTDB ;
     tdb2:location "/opt/fuseki/datasets/oac" ;
     .
 
+:indexLucene a text:TextIndexLucene ;
+    text:directory "Lucene" ;
+    text:entityMap :entMap ;
+    text:storeValues true ;
+    text:langField "lang" ;
+    text:analyzer [ a text:StandardAnalyzer ] .
+
+:entMap a text:EntityMap ;
+    text:entityField      "uri" ;
+    text:defaultField     "text" ;
+    text:langField        "lang" ;
+    text:map (
+        [ text:field "text" ; text:predicate rdfs:label ]
+    ) .
 ```
 
 ```console
